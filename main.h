@@ -16,4 +16,9 @@ int _puts(char *str);
 char *convert(unsigned long int num, int base, int lowercase);
 int get_flag(char s, flags_t *f);
 int (*get_print(char s))(va_list, flags_t *);
+int print_int(va_list l, flags_t *f);
+int print_unsigned(va_list l, flags_t *f);
+void print_number(int n);
+int count_digit(int i);
+
 #endif

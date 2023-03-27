@@ -10,11 +10,11 @@
 
 int print_binary(va_list l, flags_t *f)
 {
-        unsigned int n = va_arg(l, unsigned int);
-        char *str = convert(n, 2, 0);
+	unsigned int n = va_arg(l, unsigned int);
+	char *str = convert(n, 2, 0);
 
-        (void)f;
-        return (_puts(str));
+	(void)f;
+	return (_puts(str));
 }
 
 /**
@@ -26,14 +26,14 @@ int print_binary(va_list l, flags_t *f)
 
 int print_octal(va_list l, flags_t *f)
 {
-        unsigned int n = va_arg(l, unsigned int);
-        char *str = convert(n, 8, 0);
-        int c = 0;
+	unsigned int n = va_arg(l, unsigned int);
+	char *str = convert(n, 8, 0);
+	int c = 0;
 
-        if (f->hash == 1 && str[0] != '0')
-                c += _putchar('0');
-        c += _puts(str);
-        return (c);
+	if (f->hash == 1 && str[0] != '0')
+		c += _putchar('0');
+	c += _puts(str);
+	return (c);
 }
 
 /**

@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+int print_string(va_list l, flags_t *f);
+int print_char(va_list l, flags_t *f);
 int print_binary(va_list l, flags_t *f);
 int print_hex(va_list l, flags_t *f);
 int print_hex_big(va_list l, flags_t *f);

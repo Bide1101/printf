@@ -3,6 +3,10 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+int print_bigS(va_list l, flags_t *f);
+int print_rev(va_list l, flags_t *f);
+int print_rot13(va_list l, flags_t *f);
+int print_percent(va_list l, flags_t *f);
 int print_string(va_list l, flags_t *f);
 int print_char(va_list l, flags_t *f);
 int print_binary(va_list l, flags_t *f);

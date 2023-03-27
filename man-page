@@ -1,0 +1,51 @@
+NAME
+
+printf - formatted output conversion
+
+SYNOPSIS
+
+#include "main.h"
+int printf(const char *format, ...);
+
+
+DESCRIPTION
+
+The printf function writes the output to stdout, according to a format specifier. The format specifier is a string that contains conversion specifications, each beginning with a % character and ending with a conversion specifier.
+
+The conversion specifiers supported by printf are:
+
+Conversion specifier	Output
+%c	Single character
+%s	String of characters
+%d or %i	Signed decimal integer
+%u	Unsigned decimal integer
+%x or %X	Unsigned hexadecimal integer
+%o	Unsigned octal integer
+%p	Pointer address
+%f	Floating-point number
+%%	Percent character
+In addition, printf also supports various flags, width, precision, and length modifiers, which can be used to control the output formatting.
+
+RETURN VALUE
+
+The printf function returns the number of characters written to stdout, or a negative value if an error occurred.
+
+EXAMPLES
+
+#include "holberton.h"
+int main(void)
+{
+	    char *str = "Hello, ALX!";
+	    int num = 12345;
+	    printf("String: %s\nNumber: %d\n", str, num);
+	    return (0);
+}
+
+String: Hello, ALX!
+Number: 12345
+
+
+SEE ALSO
+
+fprintf(3) - formatted output to a file stream
+sprintf(3) - formatted output to a string

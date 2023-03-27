@@ -1,5 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
+#include <stdlib.h>
+#include <stdarg.h>
 
 /**
  * struct flags - struct containing flags to "turn on"
@@ -29,8 +31,6 @@ typedef struct printHandler
 	int (*f)(va_list ap, flags_t *f);
 } ph;
 
-#include <stdlib.h>
-#include <stdarg.h>
 int print_bigS(va_list l, flags_t *f);
 int print_rev(va_list l, flags_t *f);
 int print_rot13(va_list l, flags_t *f);

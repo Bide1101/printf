@@ -1,84 +1,131 @@
 #include "main.h"
 
 /**
- * print_int - prints an integer
- * @l: va_list of arguments from _printf
- * @f: pointer to the struct flags determining
- * if a flag is passed to _printf
- * Return: number of char printed
+ * print_int - Print int
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width.
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars
  */
-int print_int(va_list l, flags_t *f)
+
+int print_int(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	int n = va_arg(l, int);
-	int res = count_digit(n);
+	int i = BUFF_SIZE - 2;
+	int is_negative = 0;
+	long int n = va_arg(types, long int);
+	unsigned long int num;
 
-	if (f->space == 1 && f->plus == 0 && n >= 0)
-		res += _putchar(' ');
-	if (f->plus == 1 && n >= 0)
-		res += _putchar('+');
-	if (n <= 0)
-		res++;
-	print_number(n);
-	return (res);
-}
+	n = convert_size_number(n, size);
 
-/**
-* print_unsigned - prints an unsigned integer
-* @l: va_list of arguments from _printf
-* @f: pointer to the struct flags determining
-* if a flag is passed to _printf
-* Return: number of char printed
-*/
-int print_unsigned(va_list l, flags_t *f)
-{
-	unsigned int u = va_arg(l, unsigned int);
-	char *str = convert(u, 10, 0);
+	if (n == 0)
+		buffer[i--] = '0';
 
-	(void)f;
-	return (_puts(str));
-}
-
-/**
-* print_number - helper function that loops through
-* an integer and prints all its digits
-* @n: integer to be printed
-*/
-void print_number(int n)
-{
-	unsigned int n1;
+	buffer[BUFF_SIZE - 1] = '\0';
+	num = (unsigned long int)n;
 
 	if (n < 0)
 	{
-		_putchar('-');
-		n1 = -n;
+		num = (unsigned long int)((-1) * n);
+		is_negative = 1;
 	}
-	else
-		n1 = n;
 
-	if (n1 / 10)
-		print_number(n1 / 10);
-	_putchar((n1 % 10) + '0');
+	while (num > 0)
+	{
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
+	}
+
+	i++;
+
+	return (write_number(is_negative, i, buffer, flags, width, precision, size));
 }
 
 /**
-* count_digit - returns the number of digits in an integer
-* for _printf
-* @i: integer to evaluate
-* Return: number of digits
-*/
-int count_digit(int i)
-{
-	unsigned int d = 0;
-	unsigned int u;
+ * print_unsigned - Prints an unsigned number
+ * @types: List a of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed.
+ */
 
-	if (i < 0)
-		u = i * -1;
-	else
-		u = i;
-	while (u != 0)
+int print_unsigned(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	int i = BUFF_SIZE - 2;
+	unsigned long int num = va_arg(types, unsigned long int);
+
+	num = convert_size_unsgnd(num, size);
+
+	if (num == 0)
+		buffer[i--] = '0';
+
+	buffer[BUFF_SIZE - 1] = '\0';
+
+	while (num > 0)
 	{
-		u /= 10;
-		d++;
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
 	}
-	return (d);
+
+	i++;
+
+	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
+}
+
+/**
+ * print_pointer - Prints the value of a pointer
+ * @types: List a of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars
+ */
+
+int print_pointer(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	char extra_c = 0, padd = ' ';
+	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1;
+	unsigned long num_addrs;
+	char map_to[] = "0123456789abcdef";
+	void *addrs = va_arg(types, void *);
+
+	UNUSED(width);
+	UNUSED(size);
+
+	if (addrs == NULL)
+		return (write(1, "(nil)", 5));
+
+	buffer[BUFF_SIZE - 1] = '\0';
+	UNUSED(precision);
+
+	num_addrs = (unsigned long)addrs;
+
+	while (num_addrs > 0)
+	{
+		buffer[ind--] = map_to[num_addrs % 16];
+		num_addrs /= 16;
+		length++;
+	}
+
+	if ((flags & F_ZERO) && !(flags & F_MINUS))
+		padd = '0';
+	if (flags & F_PLUS)
+		extra_c = '+', length++;
+	else if (flags & F_SPACE)
+		extra_c = ' ', length++;
+
+	ind++;
+
+	return (write_pointer(buffer, ind, length,
+		width, flags, padd, extra_c, padd_start));
 }

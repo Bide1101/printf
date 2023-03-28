@@ -35,10 +35,17 @@ EXAMPLES
 #include "holberton.h"
 int main(void)
 {
+<<<<<<< HEAD
     char *str = "Hello, ALX!";
     int num = 12345;
     printf("String: %s\nNumber: %d\n", str, num);
     return (0);
+=======
+	    char *str = "Hello, ALX!";
+	    int num = 12345;
+	    printf("String: %s\nNumber: %d\n", str, num);
+	    return (0);
+>>>>>>> a54b162d1ebbe944d577e448becb51abdc68bb21
 }
 
 String: Hello, ALX!

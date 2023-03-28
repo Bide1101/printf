@@ -14,34 +14,34 @@
 int print_int(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	int i = BUFF_SIZE - 2;
+	int j = BUFF_SIZE - 2;
 	int is_negative = 0;
 	long int n = va_arg(types, long int);
-	unsigned long int num;
+	unsigned long int number;
 
 	n = convert_size_number(n, size);
 
 	if (n == 0)
-		buffer[i--] = '0';
+		buffer[j--] = '0';
 
 	buffer[BUFF_SIZE - 1] = '\0';
-	num = (unsigned long int)n;
+	number = (unsigned long int)n;
 
 	if (n < 0)
 	{
-		num = (unsigned long int)((-1) * n);
+		number = (unsigned long int)((-1) * n);
 		is_negative = 1;
 	}
 
-	while (num > 0)
+	while (number > 0)
 	{
-		buffer[i--] = (num % 10) + '0';
-		num /= 10;
+		buffer[j--] = (number % 10) + '0';
+		number /= 10;
 	}
 
-	i++;
+	j++;
 
-	return (write_number(is_negative, i, buffer, flags, width, precision, size));
+	return (write_number(is_negative, j, buffer, flags, width, precision, size));
 }
 
 /**
@@ -58,25 +58,25 @@ int print_int(va_list types, char buffer[],
 int print_unsigned(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	int i = BUFF_SIZE - 2;
+	int a = BUFF_SIZE - 2;
 	unsigned long int num = va_arg(types, unsigned long int);
 
 	num = convert_size_unsgnd(num, size);
 
 	if (num == 0)
-		buffer[i--] = '0';
+		buffer[a--] = '0';
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
 	while (num > 0)
 	{
-		buffer[i--] = (num % 10) + '0';
+		buffer[a--] = (num % 10) + '0';
 		num /= 10;
 	}
 
-	i++;
+	a++;
 
-	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
+	return (write_unsgnd(0, a, buffer, flags, width, precision, size));
 }
 
 /**
@@ -93,39 +93,39 @@ int print_unsigned(va_list types, char buffer[],
 int print_pointer(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	char extra_c = 0, padd = ' ';
-	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1;
-	unsigned long num_addrs;
-	char map_to[] = "0123456789abcdef";
-	void *addrs = va_arg(types, void *);
+	char extra_d = 0, pad = ' ';
+	int index = BUFF_SIZE - 2, length = 2, pad_start = 1;
+	unsigned long num_address;
+	char map_it_to[] = "0123456789abcdef";
+	void *address = va_arg(types, void *);
 
-	UNUSED(width);
-	UNUSED(size);
+	(void)width;
+	(void)size;
 
-	if (addrs == NULL)
+	if (address == NULL)
 		return (write(1, "(nil)", 5));
 
 	buffer[BUFF_SIZE - 1] = '\0';
-	UNUSED(precision);
+	(void)precision;
 
-	num_addrs = (unsigned long)addrs;
+	num_address = (unsigned long)address;
 
-	while (num_addrs > 0)
+	while (num_address > 0)
 	{
-		buffer[ind--] = map_to[num_addrs % 16];
-		num_addrs /= 16;
+		buffer[index--] = map_it_to[num_address % 16];
+		num_address /= 16;
 		length++;
 	}
 
 	if ((flags & F_ZERO) && !(flags & F_MINUS))
-		padd = '0';
+		pad = '0';
 	if (flags & F_PLUS)
-		extra_c = '+', length++;
+		extra_d = '+', length++;
 	else if (flags & F_SPACE)
-		extra_c = ' ', length++;
+		extra_d = ' ', length++;
 
-	ind++;
+	index++;
 
-	return (write_pointer(buffer, ind, length,
-		width, flags, padd, extra_c, padd_start));
+	return (write_pointer(buffer, index, length,
+		width, flags, pad, extra_d, pad_start));
 }

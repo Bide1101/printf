@@ -14,9 +14,9 @@
 int print_char(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	char c = va_arg(types, int);
+	char u = va_arg(types, int);
 
-	return (handle_write_char(c, buffer, flags, width, precision, size));
+	return (handle_write_char(u, buffer, flags, width, precision, size));
 }
 
 /**
@@ -33,46 +33,46 @@ int print_char(va_list types, char buffer[],
 int print_string(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	int length = 0, i;
-	char *str = va_arg(types, char *);
+	int len = 0, j;
+	char *trs = va_arg(types, char *);
 
-	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
-	if (str == NULL)
+	(void)buffer;
+	(void)flags;
+	(void)width;
+	(void)precision;
+	(void)size;
+	if (trs == NULL)
 	{
-		str = "(null)";
+		trs = "(null)";
 		if (precision >= 6)
-			str = "      ";
+			trs = "      ";
 	}
 
-	while (str[length] != '\0')
-		length++;
+	while (trs[len] != '\0')
+		len++;
 
-	if (precision >= 0 && precision < length)
-		length = precision;
+	if (precision >= 0 && precision < len)
+		len = precision;
 
-	if (width > length)
+	if (width > len)
 	{
 		if (flags & F_MINUS)
 		{
-			write(1, &str[0], length);
-			for (i = width - length; i > 0; i--)
+			write(1, &trs[0], len);
+			for (j = width - len; j > 0; j--)
 				write(1, " ", 1);
 			return (width);
 		}
 		else
 		{
-			for (i = width - length; i > 0; i--)
+			for (j = width - len; j > 0; j--)
 				write(1, " ", 1);
-			write(1, &str[0], length);
+			write(1, &trs[0], len);
 			return (width);
 		}
 	}
 
-	return (write(1, str, length));
+	return (write(1, trs, len));
 }
 
 /**
@@ -89,11 +89,11 @@ int print_string(va_list types, char buffer[],
 int print_percent(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
-	UNUSED(types);
-	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
+	(void)types;
+	(void)buffer;
+	(void)flags;
+	(void)width;
+	(void)precision;
+	(void)size;
 	return (write(1, "%%", 1));
 }

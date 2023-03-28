@@ -11,30 +11,30 @@
  * Return: Number of chars
  */
 
-int print_octal(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
+int print_octal(va_list types, char buffer[], int flags,
+	int width, int precision, int size)
 {
 
 	int i = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsigned long int);
-	unsigned long int init_num = num;
+	unsigned long int n = va_arg(types, unsigned long int);
+	unsigned long int init_n = n;
 
-	UNUSED(width);
+	(void) width;
 
-	num = convert_size_unsgnd(num, size);
+	n = convert_size_unsgnd(n, size);
 
-	if (num == 0)
+	if (n == 0)
 		buffer[i--] = '0';
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
-	while (num > 0)
+	while (n > 0)
 	{
-		buffer[i--] = (num % 8) + '0';
-		num /= 8;
+		buffer[i--] = (n % 8) + '0';
+		n /= 8;
 	}
 
-	if (flags & F_HASH && init_num != 0)
+	if (flags & F_HASH && init_n != 0)
 		buffer[i--] = '0';
 
 	i++;
@@ -57,35 +57,36 @@ int print_binary(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
 	unsigned int n, m, i, sum;
-	unsigned int a[32];
-	int count;
+	unsigned int arr[32];
+	int c;
+	char z;
 
 	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
+	(void) flags;
+	(void) width;
+	(void) precision;
+	(void) size;
 
 	n = va_arg(types, unsigned int);
-	m = 2147483648; /* (2 ^ 31) */
-	a[0] = n / m;
+	m = 2147483648;
+	arr[0] = n / m;
 	for (i = 1; i < 32; i++)
 	{
 		m /= 2;
-		a[i] = (n / m) % 2;
+		arr[i] = (n / m) % 2;
 	}
-	for (i = 0, sum = 0, count = 0; i < 32; i++)
+	for (i = 0, sum = 0, c = 0; i < 32; i++)
 	{
-		sum += a[i];
+		sum += arr[i];
 		if (sum || i == 31)
 		{
-			char z = '0' + a[i];
+			z = '0' + arr[i];
 
 			write(1, &z, 1);
-			count++;
+			c++;
 		}
 	}
-	return (count);
+	return (c);
 }
 
 /**
@@ -96,8 +97,9 @@ int print_binary(va_list types, char buffer[],
  * @width: get width
  * @precision: Precision specification
  * @size: Size specifier
- * Return: Number of chars printed
+ * Return: Number of chars
  */
+
 int print_hexadecimal(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
 {
@@ -137,29 +139,29 @@ int print_hexa_upper(va_list types, char buffer[],
  * Return: Number of chars
  */
 
-int print_hexa(va_list types, char map_to[], char buffer[],
-	int flags, char flag_ch, int width, int precision, int size)
+int print_hexa(va_list types, char map_to[], char buffer[], int flags,
+	char flag_ch, int width, int precision, int size)
 {
 	int i = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsigned long int);
-	unsigned long int init_num = num;
+	unsigned long int n = va_arg(types, unsigned long int);
+	unsigned long int init_n = n;
 
-	UNUSED(width);
+	(void) width;
 
-	num = convert_size_unsgnd(num, size);
+	n = convert_size_unsgnd(n, size);
 
-	if (num == 0)
+	if (n == 0)
 		buffer[i--] = '0';
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
-	while (num > 0)
+	while (n > 0)
 	{
-		buffer[i--] = map_to[num % 16];
-		num /= 16;
+		buffer[i--] = map_to[n % 16];
+		n /= 16;
 	}
 
-	if (flags & F_HASH && init_num != 0)
+	if (flags & F_HASH && init_n != 0)
 	{
 		buffer[i--] = flag_ch;
 		buffer[i--] = '0';

@@ -61,7 +61,7 @@ int print_binary(va_list types, char buffer[],
 	int c;
 	char z;
 
-	UNUSED(buffer);
+	(void) buffer;
 	(void) flags;
 	(void) width;
 	(void) precision;

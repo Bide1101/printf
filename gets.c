@@ -10,45 +10,35 @@
 
 int get_precision(const char *format, int *i, va_list list)
 {
-	int curr_i = *i;
+	int curr_i = *i + 1;
 	int precision = -1;
 
-	while (format[curr_i] != '\0')
-	{
-		if (format[curr_i] == '.')
-		{
-			precision = 0;
-			break;
-		}
-		curr_i++;
-	}
-
-	if (precision == -1)
-	{
+	if (format[curr_i] != '.')
 		return (precision);
-	}
 
-	curr_i++;
+	precision = 0;
 
-	if (format[curr_i] == '*')
+	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
 	{
-		precision = va_arg(list, int);
-		curr_i++;
-	}
-	else
-	{
-		while (is_digit(format[curr_i]))
+		if (is_digit(format[curr_i]))
 		{
 			precision *= 10;
 			precision += format[curr_i] - '0';
-			curr_i++;
 		}
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			precision = va_arg(list, int);
+			break;
+		}
+		else
+			break;
 	}
 
-	*i = curr_i;
+	*i = curr_i - 1;
+
 	return (precision);
 }
-
 /**
  * get_size - Calculates the size to cast the argument
  * @format: Formatted string in which to print the arguments
